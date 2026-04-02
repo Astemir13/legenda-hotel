@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Эко-отель Легенда</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Легенда">
+  <meta name="theme-color" content="#3D2E1E" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1A1410" media="(prefers-color-scheme: dark)">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#FAF7F2;--warm:#F2EDE4;--sand:#E8E0D4;
+  --gold:#A8854A;--gold2:#C9A96E;--gold-light:#F0E4C8;
+  --dark:#1A1410;--brown:#3D2E1E;--text:#2C221A;
+  --muted:#9A8E82;--light:#C4B9AD;--white:#FFFFFF;
+  --green:#3A6649;--border:#E0D8CC;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--cream);height:100%;overflow:hidden;font-family:'Montserrat',sans-serif;color:var(--text)}
+#app{max-width:430px;margin:0 auto;height:100dvh;display:flex;flex-direction:column;background:var(--cream);overflow:hidden}
+
+/* SPLASH */
+#splash{position:absolute;inset:0;background:var(--dark);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity .8s ease}
+.spl-bar{width:1px;height:0;background:var(--gold2);margin-bottom:28px;animation:barV .9s ease .2s forwards}
+.spl-logo-wrap{opacity:0;animation:fIn .7s ease .9s forwards;text-align:center}
+.spl-sub{color:rgba(201,169,110,.6);font-size:9px;letter-spacing:6px;margin-top:14px;font-weight:400;opacity:0;animation:fIn .7s ease 1.1s forwards}
+.spl-bar2{width:0;height:1px;background:var(--gold2);margin-top:28px;animation:barH .7s ease 1.4s forwards}
+@keyframes barV{to{height:64px}}
+@keyframes barH{to{width:64px}}
+@keyframes fIn{to{opacity:1}}
+@keyframes scIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* HEADER */
+#hdr{background:var(--white);padding:10px 18px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);flex-shrink:0;position:relative}
+#hdr::after{content:'';position:absolute;bottom:0;left:18px;right:18px;height:1px;background:linear-gradient(90deg,transparent,var(--gold2),transparent)}
+#backBtn{background:var(--warm);border:1px solid var(--border);color:var(--brown);width:34px;height:34px;border-radius:50%;font-size:15px;display:none;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+#hdrCenter{flex:1;display:flex;justify-content:center;align-items:center}
+#hdrPhone{color:var(--gold);font-size:10px;font-weight:700;text-decoration:none;letter-spacing:1.5px;flex-shrink:0}
+
+/* NAV */
+#nav{background:var(--white);border-top:1px solid var(--border);display:flex;flex-shrink:0;padding-bottom:env(safe-area-inset-bottom,6px);position:relative}
+#nav::before{content:'';position:absolute;top:0;left:18px;right:18px;height:1px;background:linear-gradient(90deg,transparent,var(--gold2),transparent)}
+.nb{flex:1;background:none;border:none;cursor:pointer;padding:11px 2px 7px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.nb-ic{font-size:18px;opacity:.45;transition:opacity .2s}
+.nb-lb{font-size:9px;color:var(--light);letter-spacing:1px;font-weight:600;text-transform:uppercase;transition:color .2s}
+.nb.on .nb-ic{opacity:1}
+.nb.on .nb-lb{color:var(--gold)}
+.nb-dot{width:0;height:1px;background:var(--gold);border-radius:1px;transition:width .25s;margin-top:3px}
+.nb.on .nb-dot{width:18px}
+
+/* CONTENT */
+#content{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+#content::-webkit-scrollbar{display:none}
+.scr{display:none;animation:scIn .28s ease}
+.scr.on{display:block}
+
+/* ═══ HOME ═══ */
+.hero{position:relative;height:360px;overflow:hidden;background:var(--dark)}
+.hero-photo{position:absolute;inset:0;background-size:cover;background-position:center;transition:opacity 1s}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(26,20,16,.25) 0%,rgba(26,20,16,0) 35%,rgba(26,20,16,.65) 70%,rgba(26,20,16,.96) 100%)}
+.hero-content{position:absolute;bottom:0;left:0;right:0;padding:0 22px 24px}
+.hero-eye{color:var(--gold2);font-size:9px;letter-spacing:5px;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.hero-eye::before,.hero-eye::after{content:'';height:1px;background:var(--gold2);flex:0 0 18px}
+.hero-title{font-family:'Playfair Display',serif;color:#fff;font-size:38px;font-weight:400;line-height:1.1;margin-bottom:12px}
+.hero-title em{color:var(--gold2);font-style:italic}
+.hero-bottom{display:flex;align-items:center;justify-content:space-between}
+.hero-loc{color:rgba(255,255,255,.6);font-size:11px;letter-spacing:.5px}
+.hero-badge{background:rgba(168,133,74,.25);border:1px solid rgba(201,169,110,.5);border-radius:20px;padding:4px 12px;color:var(--gold2);font-size:10px;font-weight:700;letter-spacing:1px}
+
+/* Photo dots */
+.hero-dots{position:absolute;bottom:100px;left:50%;transform:translateX(-50%);display:flex;gap:5px}
+.hdot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.35);transition:all .3s;cursor:pointer}
+.hdot.on{background:var(--gold2);width:16px;border-radius:3px}
+
+/* Weather */
+.w-strip{background:var(--white);padding:14px 0;display:flex;border-bottom:1px solid var(--border)}
+.w-col{flex:1;text-align:center;position:relative}
+.w-col+.w-col::before{content:'';position:absolute;left:0;top:25%;height:50%;width:1px;background:var(--border)}
+.w-val{font-family:'Playfair Display',serif;font-size:20px;color:var(--brown)}
+.w-lbl{font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:3px;font-weight:500}
+
+/* Sections */
+.sec-pad{padding:26px 20px 0}
+.sec-eye{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.sec-eye span{color:var(--muted);font-size:9px;letter-spacing:4px;font-weight:700;text-transform:uppercase;white-space:nowrap}
+.sec-eye::before{content:'';flex:0 0 18px;height:1px;background:var(--gold2)}
+.sec-eye::after{content:'';flex:1;height:1px;background:var(--border)}
+.sec-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:16px}
+.sec-title{font-family:'Playfair Display',serif;color:var(--brown);font-size:22px;font-weight:400}
+.sec-all{background:none;border:none;color:var(--gold);font-size:10px;font-weight:700;letter-spacing:1.5px;cursor:pointer;font-family:'Montserrat',sans-serif;text-transform:uppercase}
+
+/* Mini room cards */
+.rooms-scroll{display:flex;gap:12px;overflow-x:auto;padding-bottom:6px}
+.rooms-scroll::-webkit-scrollbar{display:none}
+.rm-mini{min-width:195px;flex-shrink:0;background:var(--white);border-radius:18px;overflow:hidden;cursor:pointer;border:1px solid var(--border);box-shadow:0 2px 10px rgba(60,40,20,.07);transition:transform .2s}
+.rm-mini:active{transform:scale(.97)}
+.rm-photo{height:115px;background-size:cover;background-position:center;position:relative}
+.rm-photo-tag{position:absolute;top:10px;left:10px;background:var(--brown);color:#fff;font-size:9px;font-weight:700;letter-spacing:1.5px;padding:3px 9px;border-radius:20px;text-transform:uppercase}
+.rm-photo-overlay{position:absolute;inset:0;background:linear-gradient(transparent 50%,rgba(255,255,255,.6) 100%)}
+.rm-body{padding:12px 14px 15px}
+.rm-name{color:var(--brown);font-size:13px;font-weight:700;margin-bottom:3px;line-height:1.3}
+.rm-price{font-family:'Playfair Display',serif;color:var(--gold);font-size:16px}
+.rm-g{color:var(--muted);font-size:10px;margin-top:1px;letter-spacing:.3px}
+
+/* About */
+.about-card{background:var(--brown);border-radius:22px;padding:26px 22px;position:relative;overflow:hidden;margin:0 20px}
+.about-card::before{content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;background:radial-gradient(circle,rgba(168,133,74,.28) 0%,transparent 70%)}
+.about-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold2),transparent)}
+.about-eye{color:var(--gold2);font-size:9px;letter-spacing:4px;font-weight:700;margin-bottom:14px;text-transform:uppercase}
+.about-txt{color:rgba(255,255,255,.72);font-size:13px;line-height:1.85;font-weight:300}
+.amenities{display:flex;gap:6px;flex-wrap:wrap;margin-top:18px}
+.am{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:5px 12px;color:rgba(255,255,255,.65);font-size:10px;font-weight:500;letter-spacing:.5px}
+
+/* CTA */
+.cta{display:flex;align-items:center;gap:16px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:18px;padding:17px 22px;text-decoration:none;margin:18px 20px 30px;box-shadow:0 8px 24px rgba(168,133,74,.32);transition:opacity .2s}
+.cta:active{opacity:.87}
+.cta-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.cta-name{color:#fff;font-weight:700;font-size:15px;letter-spacing:.3px}
+.cta-sub{color:rgba(255,255,255,.65);font-size:10px;margin-top:2px;letter-spacing:1px;text-transform:uppercase}
+.cta-arr{margin-left:auto;color:rgba(255,255,255,.65);font-size:22px}
+
+/* ═══ ROOMS LIST ═══ */
+.filter-bar{padding:14px 18px;display:flex;gap:7px;overflow-x:auto;background:var(--white);border-bottom:1px solid var(--border)}
+.filter-bar::-webkit-scrollbar{display:none}
+.fpill{background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:20px;padding:7px 15px;font-size:10px;font-weight:700;letter-spacing:.5px;cursor:pointer;white-space:nowrap;transition:all .2s;font-family:'Montserrat',sans-serif;text-transform:uppercase}
+.fpill.on{background:var(--brown);color:#fff;border-color:var(--brown)}
+.rooms-list{padding:14px 18px 32px;display:flex;flex-direction:column;gap:14px}
+.rc{background:var(--white);border-radius:20px;border:1px solid var(--border);overflow:hidden;cursor:pointer;box-shadow:0 2px 12px rgba(60,40,20,.06);transition:transform .18s}
+.rc:active{transform:scale(.985)}
+.rc-photo{height:180px;background-size:cover;background-position:center;position:relative}
+.rc-photo-overlay{position:absolute;inset:0;background:linear-gradient(transparent 45%,rgba(26,20,16,.7) 100%)}
+.rc-photo-info{position:absolute;bottom:14px;left:16px;right:16px;display:flex;justify-content:space-between;align-items:flex-end}
+.rc-photo-name{font-family:'Playfair Display',serif;color:#fff;font-size:18px;line-height:1.2}
+.rc-photo-price{font-family:'Playfair Display',serif;color:var(--gold2);font-size:17px}
+.rc-tag{position:absolute;top:12px;left:12px;background:var(--brown);color:#fff;font-size:9px;font-weight:700;letter-spacing:1.5px;padding:4px 10px;border-radius:20px;text-transform:uppercase}
+.rc-body{padding:16px 18px 18px}
+.rc-meta{color:var(--muted);font-size:11px;letter-spacing:.5px;margin-bottom:12px;font-weight:400}
+.rc-feats{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.rc-feat{background:var(--warm);border-radius:6px;color:var(--muted);font-size:10px;padding:4px 9px;font-weight:500}
+.rc-btn{width:100%;background:var(--brown);color:#fff;border:none;border-radius:12px;padding:13px;font-size:11px;font-weight:700;letter-spacing:1.5px;cursor:pointer;font-family:'Montserrat',sans-serif;text-transform:uppercase}
+
+/* ═══ DETAIL ═══ */
+.detail-gallery{height:280px;position:relative;overflow:hidden;background:var(--sand)}
+.detail-photo{position:absolute;inset:0;background-size:cover;background-position:center;transition:opacity .6s}
+.detail-overlay{position:absolute;inset:0;background:linear-gradient(transparent 50%,var(--cream) 100%)}
+.detail-tag2{position:absolute;top:18px;left:18px;background:var(--brown);color:#fff;font-size:9px;font-weight:700;letter-spacing:2px;padding:5px 12px;border-radius:20px;text-transform:uppercase}
+.detail-thumbs{position:absolute;bottom:16px;left:18px;right:18px;display:flex;gap:6px;overflow-x:auto}
+.detail-thumbs::-webkit-scrollbar{display:none}
+.dthumb{width:44px;height:44px;border-radius:8px;background-size:cover;background-position:center;flex-shrink:0;cursor:pointer;border:2px solid transparent;transition:border-color .2s;opacity:.65;transition:all .2s}
+.dthumb.on{border-color:var(--gold2);opacity:1}
+.detail-body{padding:0 18px}
+.d-price-row{background:var(--white);border-radius:18px;padding:18px 20px;margin:-16px 0 0;border:1px solid var(--border);box-shadow:0 4px 20px rgba(60,40,20,.09);display:flex;align-items:center;justify-content:space-between}
+.d-price{font-family:'Playfair Display',serif;color:var(--gold);font-size:28px}
+.d-price-lbl{color:var(--muted);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;margin-top:2px}
+.d-book{background:var(--gold);color:#fff;border:none;border-radius:12px;padding:13px 18px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;font-family:'Montserrat',sans-serif}
+.d-card{background:var(--white);border-radius:18px;padding:20px;margin-top:12px;border:1px solid var(--border)}
+.d-lbl{font-size:9px;letter-spacing:3px;color:var(--gold);font-weight:700;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.d-lbl::after{content:'';flex:1;height:1px;background:var(--border)}
+.d-desc{color:var(--muted);font-size:14px;line-height:1.8;font-weight:300}
+.d-feat{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--warm)}
+.d-feat:last-child{border-bottom:none}
+.d-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0}
+.d-feat-txt{color:var(--text);font-size:13px}
+.full-btn{width:calc(100% - 36px);margin:18px 18px 40px;background:linear-gradient(135deg,var(--brown),#5A3A20);color:#fff;border:none;border-radius:16px;padding:17px;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:'Montserrat',sans-serif;display:block;box-shadow:0 8px 24px rgba(60,40,20,.22);transition:opacity .2s}
+.full-btn:active{opacity:.85}
+
+/* ═══ BOOKING ═══ */
+.bk-hdr{background:var(--brown);padding:26px 22px 22px;position:relative;overflow:hidden}
+.bk-hdr::after{content:'';position:absolute;top:-50px;right:-50px;width:160px;height:160px;background:radial-gradient(circle,rgba(168,133,74,.22) 0%,transparent 70%)}
+.bk-step{color:var(--gold2);font-size:9px;letter-spacing:4px;font-weight:700;margin-bottom:6px;text-transform:uppercase}
+.bk-title{font-family:'Playfair Display',serif;color:#fff;font-size:22px}
+.bk-prog{display:flex;gap:6px;margin-top:14px}
+.bp{flex:1;height:2px;background:rgba(255,255,255,.15);border-radius:1px;transition:background .4s}
+.bp.on{background:var(--gold2)}
+.bk-form{padding:22px 18px;display:flex;flex-direction:column;gap:16px}
+.flbl{color:var(--muted);font-size:9px;letter-spacing:3px;font-weight:700;text-transform:uppercase;display:block;margin-bottom:7px}
+.finput{width:100%;background:var(--white);border:1px solid var(--border);border-radius:12px;padding:13px 15px;color:var(--text);font-size:14px;outline:none;font-family:'Montserrat',sans-serif;-webkit-appearance:none;transition:border-color .2s}
+.finput:focus{border-color:var(--gold)}
+.ftarea{resize:none}
+.gpills{display:flex;gap:7px}
+.gpill{flex:1;height:46px;border-radius:11px;border:1.5px solid var(--border);background:var(--white);color:var(--muted);font-size:15px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all .2s}
+.gpill.on{background:var(--brown);color:#fff;border-color:var(--brown)}
+.fselect{width:100%;background:var(--white);border:1px solid var(--border);border-radius:12px;padding:13px 15px;color:var(--text);font-size:14px;outline:none;font-family:'Montserrat',sans-serif;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7' viewBox='0 0 11 7'%3E%3Cpath d='M1 1l4.5 4.5L10 1' stroke='%23A8854A' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+.crow{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid var(--warm)}
+.crow:last-child{border-bottom:none}
+.clbl{color:var(--muted);font-size:10px;letter-spacing:1px;text-transform:uppercase;font-weight:600}
+.cval{color:var(--brown);font-size:13px;font-weight:700}
+.wa-note{background:rgba(168,133,74,.07);border:1px solid rgba(168,133,74,.2);border-radius:13px;padding:14px;color:var(--gold);font-size:12px;line-height:1.7;font-weight:400}
+.bk-btns{padding:4px 18px 36px;display:flex;gap:10px}
+.btn-bk{flex:1;background:var(--white);border:1px solid var(--border);border-radius:13px;padding:15px;color:var(--brown);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;font-family:'Montserrat',sans-serif}
+.btn-nx{flex:2;background:linear-gradient(135deg,var(--brown),#5A3A20);border:none;border-radius:13px;padding:15px;color:#fff;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;font-family:'Montserrat',sans-serif;box-shadow:0 6px 16px rgba(60,40,20,.2)}
+.btn-nx:active{opacity:.85}
+.succ{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 36px;text-align:center;min-height:60vh}
+.succ-ic{font-size:60px;margin-bottom:22px}
+.succ-t{font-family:'Playfair Display',serif;color:var(--brown);font-size:24px;margin-bottom:10px}
+.succ-d{color:var(--muted);font-size:13px;line-height:1.8;font-weight:300}
+.succ-btn{margin-top:28px;background:var(--brown);color:#fff;border:none;border-radius:13px;padding:15px 36px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:'Montserrat',sans-serif}
+
+/* ═══ SERVICES ═══ */
+.svc-hero{background:var(--brown);padding:28px 22px 24px;position:relative;overflow:hidden}
+.svc-hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold2),transparent)}
+.svc-hero-t{font-family:'Playfair Display',serif;color:#fff;font-size:24px;margin-bottom:5px}
+.svc-hero-s{color:rgba(255,255,255,.5);font-size:12px;font-weight:300}
+.hrs-card{background:var(--brown);border-radius:18px;padding:20px;border:1px solid rgba(255,255,255,.06)}
+.hrs-eye{color:var(--gold2);font-size:9px;letter-spacing:4px;font-weight:700;margin-bottom:14px;text-transform:uppercase}
+.hrs-row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.07)}
+.hrs-row:last-child{border-bottom:none}
+.hrs-n{color:rgba(255,255,255,.7);font-size:13px;display:flex;align-items:center;gap:9px}
+.hrs-t{color:var(--gold2);font-size:13px;font-weight:700}
+.svc-grid{padding:16px 18px 32px;display:flex;flex-direction:column;gap:10px}
+.svc-card{background:var(--white);border-radius:16px;padding:17px 18px;border:1px solid var(--border);display:flex;align-items:center;gap:15px;box-shadow:0 2px 8px rgba(60,40,20,.04)}
+.svc-ico{width:50px;height:50px;border-radius:13px;background:var(--warm);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.svc-n{color:var(--brown);font-size:14px;font-weight:700;margin-bottom:3px}
+.svc-d{color:var(--muted);font-size:12px;line-height:1.5;font-weight:300}
+
+/* ═══ EXPLORE ═══ */
+.expl-hero{background:linear-gradient(155deg,var(--brown) 0%,#2A1A0A 100%);padding:28px 22px;position:relative;overflow:hidden}
+.expl-hero::before{content:'🏔️';position:absolute;right:-8px;bottom:-8px;font-size:110px;opacity:.05}
+.expl-t{font-family:'Playfair Display',serif;color:#fff;font-size:24px;margin-bottom:7px}
+.expl-d{color:rgba(255,255,255,.5);font-size:12px;line-height:1.7;font-weight:300}
+.spots{padding:14px 18px 32px;display:flex;flex-direction:column;gap:10px}
+.spot{background:var(--white);border-radius:18px;padding:17px 18px;border:1px solid var(--border);box-shadow:0 2px 8px rgba(60,40,20,.04)}
+.spot-top{display:flex;gap:13px;align-items:flex-start;margin-bottom:9px}
+.spot-ic{width:48px;height:48px;border-radius:13px;background:var(--warm);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.spot-n{color:var(--brown);font-size:15px;font-weight:700}
+.spot-ty{color:var(--muted);font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-top:2px;font-weight:500}
+.spot-km{background:var(--gold-light);color:var(--gold);font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;white-space:nowrap;letter-spacing:.5px;align-self:flex-start;flex-shrink:0}
+.spot-d{color:var(--muted);font-size:13px;line-height:1.6;font-weight:300}
+
+/* ═══ CONTACTS ═══ */
+.ct-hdr{background:var(--brown);padding:28px 22px;text-align:center;position:relative;overflow:hidden}
+.ct-hdr::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold2),transparent)}
+.ct-logo{margin-bottom:14px}
+.ct-t{font-family:'Playfair Display',serif;color:#fff;font-size:20px;margin-bottom:3px}
+.ct-a{color:rgba(255,255,255,.45);font-size:11px;letter-spacing:1px}
+.ct-list{padding:14px 18px 32px;display:flex;flex-direction:column;gap:10px}
+.map-c{background:linear-gradient(135deg,var(--warm),var(--sand));border-radius:18px;padding:26px 18px;text-align:center;border:1px solid var(--border)}
+.map-ic{font-size:38px;margin-bottom:10px}
+.map-a{color:var(--brown);font-size:15px;font-weight:700;margin-bottom:3px}
+.map-r{color:var(--muted);font-size:12px}
+.map-btn{display:inline-block;margin-top:14px;background:var(--brown);color:#fff;border-radius:11px;padding:10px 22px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-decoration:none;text-transform:uppercase}
+.ct-a-btn{display:flex;align-items:center;gap:14px;background:var(--white);border-radius:15px;padding:15px 17px;border:1px solid var(--border);text-decoration:none;box-shadow:0 2px 8px rgba(60,40,20,.04);transition:opacity .2s}
+.ct-a-btn:active{opacity:.72}
+.ct-ico{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.ct-n{color:var(--brown);font-size:14px;font-weight:700}
+.ct-s{color:var(--muted);font-size:12px;margin-top:1px}
+.ct-arr{margin-left:auto;color:var(--light);font-size:20px}
+.route-c{background:var(--white);border-radius:15px;padding:18px;border:1px solid var(--border)}
+.route-lbl{color:var(--gold);font-size:9px;letter-spacing:3px;font-weight:700;text-transform:uppercase;margin-bottom:11px}
+.route-txt{color:var(--muted);font-size:13px;line-height:1.85;font-weight:300}
+
+/* PWA Install Banner */
+#pwa-banner{
+  position:fixed;bottom:90px;left:50%;transform:translateX(-50%);
+  width:calc(100% - 32px);max-width:398px;
+  background:linear-gradient(135deg,#2A1F10,#3D2E1E);
+  border-radius:20px;padding:15px 17px;
+  display:none;align-items:center;gap:13px;
+  box-shadow:0 10px 40px rgba(0,0,0,.5);
+  z-index:300;
+  animation:bSlide .4s cubic-bezier(.2,.8,.3,1);
+  border:1px solid rgba(201,169,110,.35);
+}
+@keyframes bSlide{from{opacity:0;transform:translateX(-50%) translateY(16px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+.b-ico{width:42px;height:42px;border-radius:11px;background:rgba(201,169,110,.12);border:1px solid rgba(201,169,110,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.b-txt{flex:1}
+.b-title{color:#F0EDE8;font-weight:700;font-size:13px;font-family:-apple-system,sans-serif;letter-spacing:.2px}
+.b-sub{color:rgba(201,169,110,.65);font-size:10px;margin-top:2px;font-family:-apple-system,sans-serif}
+.b-btn{background:linear-gradient(135deg,#C9A96E,#E8C98A);color:#1A1410;border:none;border-radius:9px;padding:8px 14px;font-size:11px;font-weight:700;cursor:pointer;font-family:-apple-system,sans-serif;white-space:nowrap}
+.b-x{background:none;border:none;color:rgba(255,255,255,.35);font-size:20px;cursor:pointer;padding:2px;flex-shrink:0;line-height:1}
+#ios-hint{
+  position:fixed;bottom:90px;left:50%;transform:translateX(-50%);
+  width:calc(100% - 32px);max-width:398px;
+  background:linear-gradient(135deg,#2A1F10,#3D2E1E);
+  border-radius:20px;padding:18px 18px 20px;
+  z-index:300;display:none;
+  box-shadow:0 10px 40px rgba(0,0,0,.5);
+  border:1px solid rgba(201,169,110,.35);
+  animation:bSlide .4s cubic-bezier(.2,.8,.3,1);
+}
+.ih-title{color:#F0EDE8;font-weight:700;font-size:14px;margin-bottom:10px;font-family:-apple-system,sans-serif;display:flex;align-items:center;gap:8px}
+.ih-steps{color:rgba(255,255,255,.6);font-size:12px;line-height:1.85;font-family:-apple-system,sans-serif}
+.ih-steps b{color:#C9A96E}
+.ih-x{position:absolute;top:14px;right:15px;background:none;border:none;color:rgba(255,255,255,.3);font-size:20px;cursor:pointer}
+.ih-arrow{display:inline-block;width:20px;height:20px;background:rgba(201,169,110,.15);border-radius:5px;text-align:center;line-height:20px;font-size:12px;margin:0 2px}
+
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="spl-bar"></div>
+  <div class="spl-logo-wrap">
+    <!-- Inline SVG logo - mountain + ЛЕГЕНДА text -->
+    <svg width="140" height="60" viewBox="0 0 280 110" xmlns="http://www.w3.org/2000/svg">
+      <!-- Mountain icon -->
+      <polygon points="80,15 125,75 35,75" fill="none" stroke="#C9A96E" stroke-width="3" stroke-linejoin="round"/>
+      <polygon points="110,38 140,75 80,75" fill="#C9A96E" opacity=".25"/>
+      <line x1="80" y1="15" x2="80" y2="8" stroke="#C9A96E" stroke-width="2"/>
+      <path d="M73,18 Q80,10 87,18" fill="white" opacity=".4"/>
+      <!-- ЛЕГЕНДА text -->
+      <text x="155" y="52" font-family="Georgia,serif" font-size="28" fill="#C9A96E" font-weight="400" letter-spacing="3">ЛЕГЕНДА</text>
+      <!-- Tagline -->
+      <text x="155" y="70" font-family="Arial,sans-serif" font-size="9" fill="rgba(201,169,110,0.55)" letter-spacing="3.5">ЭКО-ОТЕЛЬ</text>
+      <!-- Divider -->
+      <line x1="35" y1="88" x2="245" y2="88" stroke="#C9A96E" stroke-width=".5" opacity=".3"/>
+    </svg>
+  </div>
+  <div class="spl-sub">ПРИЭЛЬБРУСЬЕ · ТЕРСКОЛ</div>
+  <div class="spl-bar2"></div>
+</div>
+
+<!-- HEADER -->
+<div id="hdr">
+  <button id="backBtn" onclick="goBack()">←</button>
+  <div id="hdrCenter">
+    <svg width="110" height="38" viewBox="0 0 280 90" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="48,8 76,52 20,52" fill="none" stroke="#A8854A" stroke-width="2.5" stroke-linejoin="round"/>
+      <polygon points="68,28 84,52 52,52" fill="#A8854A" opacity=".2"/>
+      <path d="M42,11 Q48,4 54,11" fill="#A8854A" opacity=".35"/>
+      <text x="93" y="40" font-family="Georgia,serif" font-size="26" fill="#3D2E1E" font-weight="400" letter-spacing="2">ЛЕГЕНДА</text>
+      <text x="93" y="56" font-family="Arial,sans-serif" font-size="8.5" fill="#A8854A" letter-spacing="3">ЭКО-ОТЕЛЬ</text>
+    </svg>
+  </div>
+  <a href="tel:+79993000088" id="hdrPhone">ЗВОНОК</a>
+</div>
+
+<!-- CONTENT -->
+<div id="content">
+
+<!-- HOME -->
+<div class="scr on" id="s-home">
+  <div class="hero">
+    <div class="hero-photo" id="heroPhoto" style="background-image:url('https://thb.tildacdn.com/tild3362-6536-4332-b164-326333386236/-/empty/IMG_8105_-fotor-2025.jpg')"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-dots" id="heroDots"></div>
+    <div class="hero-content">
+      <div class="hero-eye">ЭКО-ОТЕЛЬ</div>
+      <div class="hero-title">Легенда<br><em>Приэльбрусья</em></div>
+      <div class="hero-bottom">
+        <div class="hero-loc">📍 Поляна Чегет · Терскол</div>
+        <div class="hero-badge">★★★★★</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="w-strip">
+    <div class="w-col"><div class="w-val">−3°</div><div class="w-lbl">Погода</div></div>
+    <div class="w-col"><div class="w-val">❄️</div><div class="w-lbl">Снег</div></div>
+    <div class="w-col"><div class="w-val">11</div><div class="w-lbl">Ветер м/с</div></div>
+    <div class="w-col"><div class="w-val">2040</div><div class="w-lbl">Высота м</div></div>
+  </div>
+
+  <div class="sec-pad">
+    <div class="sec-eye"><span>НАВИГАЦИЯ</span></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div onclick="go('rooms')" style="background:var(--white);border:1px solid var(--border);border-radius:16px;padding:18px 15px;cursor:pointer;position:relative;overflow:hidden;box-shadow:0 2px 10px rgba(60,40,20,.06)">
+        <div style="position:absolute;top:0;right:0;width:60px;height:60px;background:radial-gradient(circle,var(--gold-light),transparent);opacity:.4"></div>
+        <div style="font-size:26px;margin-bottom:10px">🛏️</div>
+        <div style="color:var(--brown);font-size:13px;font-weight:700">Номера</div>
+        <div style="color:var(--muted);font-size:10px;margin-top:2px">6 категорий</div>
+        <div style="color:var(--gold);font-size:13px;position:absolute;bottom:14px;right:14px;opacity:.6">→</div>
+      </div>
+      <div onclick="go('booking')" style="background:var(--white);border:1px solid var(--border);border-radius:16px;padding:18px 15px;cursor:pointer;position:relative;overflow:hidden;box-shadow:0 2px 10px rgba(60,40,20,.06)">
+        <div style="position:absolute;top:0;right:0;width:60px;height:60px;background:radial-gradient(circle,var(--gold-light),transparent);opacity:.4"></div>
+        <div style="font-size:26px;margin-bottom:10px">📅</div>
+        <div style="color:var(--brown);font-size:13px;font-weight:700">Бронировать</div>
+        <div style="color:var(--muted);font-size:10px;margin-top:2px">Быстро и удобно</div>
+        <div style="color:var(--gold);font-size:13px;position:absolute;bottom:14px;right:14px;opacity:.6">→</div>
+      </div>
+      <div onclick="go('services')" style="background:var(--white);border:1px solid var(--border);border-radius:16px;padding:18px 15px;cursor:pointer;position:relative;overflow:hidden;box-shadow:0 2px 10px rgba(60,40,20,.06)">
+        <div style="position:absolute;top:0;right:0;width:60px;height:60px;background:radial-gradient(circle,var(--gold-light),transparent);opacity:.4"></div>
+        <div style="font-size:26px;margin-bottom:10px">✦</div>
+        <div style="color:var(--brown);font-size:13px;font-weight:700">Услуги</div>
+        <div style="color:var(--muted);font-size:10px;margin-top:2px">Сауна, ресторан</div>
+        <div style="color:var(--gold);font-size:13px;position:absolute;bottom:14px;right:14px;opacity:.6">→</div>
+      </div>
+      <div onclick="go('explore')" style="background:var(--white);border:1px solid var(--border);border-radius:16px;padding:18px 15px;cursor:pointer;position:relative;overflow:hidden;box-shadow:0 2px 10px rgba(60,40,20,.06)">
+        <div style="position:absolute;top:0;right:0;width:60px;height:60px;background:radial-gradient(circle,var(--gold-light),transparent);opacity:.4"></div>
+        <div style="font-size:26px;margin-bottom:10px">🗺️</div>
+        <div style="color:var(--brown);font-size:13px;font-weight:700">О крае</div>
+        <div style="color:var(--muted);font-size:10px;margin-top:2px">Чегет, Эльбрус</div>
+        <div style="color:var(--gold);font-size:13px;position:absolute;bottom:14px;right:14px;opacity:.6">→</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-pad" style="padding-top:28px">
+    <div class="sec-head">
+      <div class="sec-title">Наши номера</div>
+      <button class="sec-all" onclick="go('rooms')">Все →</button>
+    </div>
+    <div class="rooms-scroll" id="hmr"></div>
+  </div>
+
+  <div style="padding:24px 20px 0">
+    <div class="about-card">
+      <div class="about-eye">ОБ ОТЕЛЕ</div>
+      <div class="about-txt">Эко-отель «Легенда» — уютный деревянный сруб из натуральных материалов в сердце Приэльбрусья. Домашний уют, горный воздух и незабываемые виды на Эльбрус на высоте 2040 м.</div>
+      <div class="amenities">
+        <div class="am">🅿️ Парковка</div>
+        <div class="am">📶 Wi-Fi</div>
+        <div class="am">🐾 Питомцы</div>
+        <div class="am">👶 Семьям</div>
+        <div class="am">🛎️ 24/7</div>
+      </div>
+    </div>
+  </div>
+
+  <a href="tel:+79993000088" class="cta">
+    <div class="cta-icon">📞</div>
+    <div><div class="cta-name">+7 999 300-00-88</div><div class="cta-sub">Ресепшн · Круглосуточно</div></div>
+    <div class="cta-arr">›</div>
+  </a>
+</div>
+
+<!-- ROOMS -->
+<div class="scr" id="s-rooms">
+  <div class="filter-bar">
+    <button class="fpill on" onclick="filt('all',this)">Все</button>
+    <button class="fpill" onclick="filt('budget',this)">До 5 000 ₽</button>
+    <button class="fpill" onclick="filt('comfort',this)">Комфорт</button>
+    <button class="fpill" onclick="filt('premium',this)">Премиум</button>
+  </div>
+  <div class="rooms-list" id="rl"></div>
+</div>
+
+<!-- DETAIL -->
+<div class="scr" id="s-detail">
+  <div class="detail-gallery">
+    <div class="detail-photo" id="dPhoto"></div>
+    <div class="detail-overlay"></div>
+    <div id="dTag2"></div>
+    <div class="detail-thumbs" id="dThumbs"></div>
+  </div>
+  <div class="detail-body">
+    <div class="d-price-row">
+      <div><div class="d-price" id="dPrice"></div><div class="d-price-lbl">ЗА СУТКИ</div></div>
+      <button class="d-book" onclick="go('booking')">Забронировать</button>
+    </div>
+    <div class="d-card">
+      <div class="d-lbl">О НОМЕРЕ</div>
+      <div class="d-desc" id="dDesc"></div>
+      <div id="dFeats" style="margin-top:14px"></div>
+    </div>
+  </div>
+  <button class="full-btn" onclick="go('booking')">ЗАБРОНИРОВАТЬ НОМЕР</button>
+</div>
+
+<!-- BOOKING -->
+<div class="scr" id="s-booking"><div id="bk"></div></div>
+
+<!-- SERVICES -->
+<div class="scr" id="s-services">
+  <div class="svc-hero">
+    <div class="svc-hero-t">Услуги & Сервис</div>
+    <div class="svc-hero-s">Всё для вашего комфортного отдыха</div>
+  </div>
+  <div style="padding:16px 18px 0">
+    <div class="hrs-card">
+      <div class="hrs-eye">ВРЕМЯ РАБОТЫ</div>
+      <div class="hrs-row"><div class="hrs-n"><span>🛎️</span>Ресепшн</div><div class="hrs-t">24 / 7</div></div>
+      <div class="hrs-row"><div class="hrs-n"><span>🍽️</span>Ресторан</div><div class="hrs-t">10:00 – 21:00</div></div>
+      <div class="hrs-row"><div class="hrs-n"><span>🧖</span>Сауна</div><div class="hrs-t">10:00 – 21:00</div></div>
+    </div>
+  </div>
+  <div class="svc-grid">
+    <div class="svc-card"><div class="svc-ico">⛷️</div><div><div class="svc-n">Горные лыжи</div><div class="svc-d">Чегет — знаменитые чёрные трассы в 500 м от отеля</div></div></div>
+    <div class="svc-card"><div class="svc-ico">🚡</div><div><div class="svc-n">Канатная дорога</div><div class="svc-d">Подъём над лесом с видом на вершины Эльбруса</div></div></div>
+    <div class="svc-card"><div class="svc-ico">🌿</div><div><div class="svc-n">Эко-маршруты</div><div class="svc-d">Долина Нарзанов — 3 км по сосновому бору</div></div></div>
+    <div class="svc-card"><div class="svc-ico">🧖</div><div><div class="svc-n">Сауна</div><div class="svc-d">Скидка 30% для постояльцев отеля</div></div></div>
+    <div class="svc-card"><div class="svc-ico">🍖</div><div><div class="svc-n">Ресторан</div><div class="svc-d">Кавказская и европейская кухня от шеф-повара</div></div></div>
+    <div class="svc-card"><div class="svc-ico">🎱</div><div><div class="svc-n">Бильярд</div><div class="svc-d">Вечерний досуг и отдых внутри отеля</div></div></div>
+  </div>
+</div>
+
+<!-- EXPLORE -->
+<div class="scr" id="s-explore">
+  <div class="expl-hero">
+    <div class="expl-t">Приэльбрусье</div>
+    <div class="expl-d">Горный рай у подножия Эльбруса — центр зимнего и летнего туризма Северного Кавказа. Высота от 2000 м.</div>
+  </div>
+  <div class="spots">
+    <div class="spot"><div class="spot-top"><div class="spot-ic">⛷️</div><div style="flex:1"><div class="spot-n">Гора Чегет</div><div class="spot-ty">Горнолыжный курорт</div></div><div class="spot-km">0.5 км</div></div><div class="spot-d">Знаменитые «чёрные трассы» и двухкресельная канатная дорога с захватывающим видом на Эльбрус</div></div>
+    <div class="spot"><div class="spot-top"><div class="spot-ic">💧</div><div style="flex:1"><div class="spot-n">Долина Нарзанов</div><div class="spot-ty">Природный маршрут</div></div><div class="spot-km">2 км</div></div><div class="spot-d">Минеральные источники среди соснового бора. Эко-тропа 3 км, доступна круглый год</div></div>
+    <div class="spot"><div class="spot-top"><div class="spot-ic">🏔️</div><div style="flex:1"><div class="spot-n">Поляна Азау</div><div class="spot-ty">Главный курорт</div></div><div class="spot-km">3.6 км</div></div><div class="spot-d">Основная горнолыжная зона с современными подъёмниками на склоны Эльбруса</div></div>
+    <div class="spot"><div class="spot-top"><div class="spot-ic">🗻</div><div style="flex:1"><div class="spot-n">Гора Эльбрус</div><div class="spot-ty">Высочайшая вершина</div></div><div class="spot-km">10 км</div></div><div class="spot-d">5642 м над уровнем моря. Высочайшая вершина России и Европы — видна с балкона отеля</div></div>
+    <div class="spot"><div class="spot-top"><div class="spot-ic">🌊</div><div style="flex:1"><div class="spot-n">Река Баксан</div><div class="spot-ty">Природа</div></div><div class="spot-km">0.3 км</div></div><div class="spot-d">Кристально чистая горная река с живописными берегами и шумными перекатами</div></div>
+  </div>
+</div>
+
+<!-- CONTACTS -->
+<div class="scr" id="s-contacts">
+  <div class="ct-hdr">
+    <div class="ct-logo">
+      <svg width="100" height="44" viewBox="0 0 280 110" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="80,15 125,75 35,75" fill="none" stroke="rgba(201,169,110,.7)" stroke-width="2.5" stroke-linejoin="round"/>
+        <polygon points="110,38 140,75 80,75" fill="rgba(201,169,110,.18)"/>
+        <path d="M74,19 Q80,11 86,19" fill="white" opacity=".3"/>
+        <text x="152" y="52" font-family="Georgia,serif" font-size="27" fill="rgba(201,169,110,.85)" letter-spacing="2">ЛЕГЕНДА</text>
+        <text x="152" y="70" font-family="Arial,sans-serif" font-size="9" fill="rgba(201,169,110,.45)" letter-spacing="3.5">ЭКО-ОТЕЛЬ</text>
+      </svg>
+    </div>
+    <div class="ct-t">Эко-отель Легенда</div>
+    <div class="ct-a">Поляна Чегет · Терскол · КБР</div>
+  </div>
+  <div class="ct-list">
+    <div class="map-c"><div class="map-ic">🗺️</div><div class="map-a">Поляна Чегет, Терскол</div><div class="map-r">Кабардино-Балкарская Республика</div><a href="https://yandex.ru/maps/org/legenda/1184772629/" target="_blank" class="map-btn">Открыть карту</a></div>
+    <a href="tel:+79993000088" class="ct-a-btn"><div class="ct-ico" style="background:#EDF5EF">📞</div><div><div class="ct-n">Позвонить</div><div class="ct-s">+7 999 300-00-88</div></div><div class="ct-arr">›</div></a>
+    <a href="https://wa.me/79993000088" target="_blank" class="ct-a-btn"><div class="ct-ico" style="background:#EDF5EF">📱</div><div><div class="ct-n">WhatsApp</div><div class="ct-s">Написать сообщение</div></div><div class="ct-arr">›</div></a>
+    <a href="/cdn-cgi/l/email-protection#bef2dbd9dbd0dadfe1d6d1cadbd2fed3dfd7d290cccb" class="ct-a-btn"><div class="ct-ico" style="background:#EEF3F7">✉️</div><div><div class="ct-n">Email</div><div class="ct-s"><span class="__cf_email__" data-cfemail="d39fb6b4b6bdb7b28cbbbca7b6bf93beb2babffda1a6">[email&#160;protected]</span></div></div><div class="ct-arr">›</div></a>
+    <a href="https://hotellegenda.ru" target="_blank" class="ct-a-btn"><div class="ct-ico" style="background:#FAF4E8">🌐</div><div><div class="ct-n">Сайт</div><div class="ct-s">hotellegenda.ru</div></div><div class="ct-arr">›</div></a>
+    <div class="route-c"><div class="route-lbl">Как добраться</div><div class="route-txt">🚗 Из Нальчика — 120 км вдоль реки Баксан, около 2 часов<br><br>✈️ Аэропорты — Нальчик (NAL) или Минеральные Воды (MRV)</div></div>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<div id="nav">
+  <button class="nb on" id="n-home" onclick="go('home')"><div class="nb-ic">🏠</div><div class="nb-lb">Главная</div><div class="nb-dot"></div></button>
+  <button class="nb" id="n-rooms" onclick="go('rooms')"><div class="nb-ic">🛏️</div><div class="nb-lb">Номера</div><div class="nb-dot"></div></button>
+  <button class="nb" id="n-booking" onclick="go('booking')"><div class="nb-ic">📅</div><div class="nb-lb">Бронь</div><div class="nb-dot"></div></button>
+  <button class="nb" id="n-services" onclick="go('services')"><div class="nb-ic">✦</div><div class="nb-lb">Услуги</div><div class="nb-dot"></div></button>
+  <button class="nb" id="n-contacts" onclick="go('contacts')"><div class="nb-ic">📞</div><div class="nb-lb">Контакты</div><div class="nb-dot"></div></button>
+</div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// Hero slideshow photos
+var HERO_PHOTOS=[
+  'https://thb.tildacdn.com/tild3362-6536-4332-b164-326333386236/-/empty/IMG_8105_-fotor-2025.jpg',
+  'https://thb.tildacdn.com/tild3437-6339-4534-a466-363666653961/-/empty/IMG_8122-2_-fotor-20.jpg',
+  'https://thb.tildacdn.com/tild6539-3034-4464-b532-656563396364/-/empty/IMG_7969_-fotor-2025.jpg',
+  'https://thb.tildacdn.com/tild6533-6230-4137-b861-326662353338/-/empty/IMG_7907-fotor-20250.jpg',
+  'https://thb.tildacdn.com/tild3239-3061-4163-b764-356134303230/-/empty/IMG_8071_-fotor-2025.jpg',
+];
+var heroIdx=0;
+function initHeroDots(){
+  var dc=document.getElementById('heroDots');
+  dc.innerHTML='';
+  HERO_PHOTOS.forEach(function(_,i){
+    dc.innerHTML+='<div class="hdot'+(i==0?' on':'')+'" onclick="setHero('+i+')"></div>';
+  });
+}
+function setHero(i){
+  heroIdx=i;
+  document.getElementById('heroPhoto').style.backgroundImage="url('"+HERO_PHOTOS[i]+"')";
+  document.querySelectorAll('.hdot').forEach(function(d,j){d.className='hdot'+(j==i?' on':'')});
+}
+initHeroDots();
+setInterval(function(){setHero((heroIdx+1)%HERO_PHOTOS.length)},4000);
+
+// Rooms data with real photos
+var ROOMS=[
+  {id:1,n:"Стандартный двухместный",g:2,p:4000,s:32,tag:"ХИТ",tc:"#3A6649",
+   d:"Уютный номер с большой двуспальной кроватью и диван-кроватью в гостиной. Панорамный вид на горы.",
+   f:["Вид на горы","Wi-Fi","Smart TV","Холодильник","Чайник","Ванная комната"],
+   photos:[
+     'https://thb.tildacdn.com/tild6262-6132-4366-a530-653366333066/-/empty/L6.jpg',
+     'https://thb.tildacdn.com/tild3532-3537-4734-b161-356137316163/-/empty/IMG_7977_-fotor-2025.jpg',
+   ]},
+  {id:2,n:"Семейный",g:4,p:6000,s:35,tag:"СЕМЬЯМ",tc:"#3A5A8A",
+   d:"Просторный двухкомнатный номер с двумя спальными зонами для всей семьи.",
+   f:["Вид на горы","Wi-Fi","Smart TV","Раскладная кровать","Холодильник"],
+   photos:[
+     'https://thb.tildacdn.com/tild3839-6330-4133-b838-303737366434/-/empty/IMG_1304.JPG',
+     'https://thb.tildacdn.com/tild6437-3036-4533-a466-653133633064/-/empty/IMG_8080_-fotor-2025.jpg',
+   ]},
+  {id:3,n:"Стандартный трёхместный",g:3,p:5500,s:32,tag:"",tc:"",
+   d:"Три односпальные кровати, кухонные принадлежности и восхитительный вид на горы.",
+   f:["Вид на горы","Wi-Fi","3 кровати","Холодильник","Обеденный стол"],
+   photos:[
+     'https://thb.tildacdn.com/tild3535-3832-4332-b330-396466393765/-/empty/IMG_7994_-fotor-2025.jpg',
+     'https://thb.tildacdn.com/tild6261-3134-4265-b732-333738386661/-/empty/IMG_7913_-fotor-2025.jpg',
+   ]},
+  {id:4,n:"Полулюкс",g:3,p:5500,s:35,tag:"ПОПУЛЯРНЫЙ",tc:"#8B6914",
+   d:"Комфортный номер с большой кроватью и отдельной гостиной с диван-кроватью.",
+   f:["Вид на горы","Wi-Fi","Гостиная","Smart TV","Чайник"],
+   photos:[
+     'https://thb.tildacdn.com/tild3666-3537-4431-b939-343633316438/-/empty/photo_2025-05-17_150.jpg',
+     'https://thb.tildacdn.com/tild3361-3663-4233-b763-376235316339/-/empty/photo_2025-05-17_150.jpg',
+   ]},
+  {id:5,n:"Люкс",g:3,p:6500,s:37,tag:"ПРЕМИУМ",tc:"#7A4020",
+   d:"Роскошный люкс с двуспальной кроватью, просторной гостиной и мини-кухней.",
+   f:["Вид на горы","Wi-Fi","Гостиная","Smart TV","Мини-кухня"],
+   photos:[
+     'https://thb.tildacdn.com/tild3963-3035-4262-a636-663965323532/-/empty/freepik__upload__659.jpeg',
+     'https://thb.tildacdn.com/tild3362-6536-4332-b164-326333386236/-/empty/IMG_8105_-fotor-2025.jpg',
+   ]},
+  {id:6,n:"Барнхаус «Легенда»",g:5,p:14000,s:80,tag:"ДОМИК",tc:"#5C3D7A",
+   d:"Отдельно стоящий двухэтажный дом с двумя спальнями, террасой и стиральной машиной.",
+   f:["Отдельный домик","2 спальни","Терраса","Стиральная машина","СВЧ","Парковка"],
+   photos:[
+     'https://thb.tildacdn.com/tild6162-3231-4662-b166-343234356462/-/empty/WhatsApp-Image-2020-.jpg',
+     'https://thb.tildacdn.com/tild3337-6136-4464-a331-343935633436/-/empty/WhatsApp-Image-2020-.jpg',
+   ]},
+];
+
+var TABS=['home','rooms','booking','services','contacts'];
+var hist=[],cur='home';
+var bStep=1,bForm={ci:'',co:'',g:2,rm:'',nm:'',ph:'',em:'',cm:''};
+var curDetailPhotos=[],curDetailPhotoIdx=0;
+
+// Splash
+setTimeout(function(){
+  var s=document.getElementById('splash');
+  s.style.opacity='0';
+  setTimeout(function(){s.style.display='none'},800);
+},2600);
+
+// Home mini rooms
+(function(){
+  var el=document.getElementById('hmr');
+  ROOMS.forEach(function(r){
+    el.innerHTML+='<div class="rm-mini" onclick="openRoom('+r.id+')">'
+      +'<div class="rm-photo" style="background-image:url(\''+r.photos[0]+'\')">'
+      +(r.tag?'<div class="rm-photo-tag">'+r.tag+'</div>':'')
+      +'<div class="rm-photo-overlay"></div></div>'
+      +'<div class="rm-body">'
+      +'<div class="rm-name">'+r.n+'</div>'
+      +'<div class="rm-price">от '+r.p.toLocaleString('ru')+' ₽</div>'
+      +'<div class="rm-g">до '+r.g+' гостей · '+r.s+' м²</div>'
+      +'</div></div>';
+  });
+})();
+
+// Build rooms list
+function buildRL(f){
+  var el=document.getElementById('rl');el.innerHTML='';
+  ROOMS.filter(function(r){
+    if(f=='budget')return r.p<5000;
+    if(f=='comfort')return r.p>=5000&&r.p<8000;
+    if(f=='premium')return r.p>=8000;
+    return true;
+  }).forEach(function(r){
+    el.innerHTML+='<div class="rc" onclick="openRoom('+r.id+')">'
+      +'<div class="rc-photo" style="background-image:url(\''+r.photos[0]+'\')">'
+      +'<div class="rc-photo-overlay"></div>'
+      +(r.tag?'<div class="rc-tag" style="background:'+r.tc+'">'+r.tag+'</div>':'')
+      +'<div class="rc-photo-info">'
+      +'<div class="rc-photo-name">'+r.n+'</div>'
+      +'<div class="rc-photo-price">от '+r.p.toLocaleString('ru')+' ₽</div>'
+      +'</div></div>'
+      +'<div class="rc-body">'
+      +'<div class="rc-meta">'+r.s+' м² · до '+r.g+' гостей</div>'
+      +'<div class="rc-feats">'+r.f.slice(0,4).map(function(x){return'<div class="rc-feat">'+x+'</div>'}).join('')+'</div>'
+      +'<button class="rc-btn">ПОДРОБНЕЕ О НОМЕРЕ</button>'
+      +'</div></div>';
+  });
+}
+buildRL('all');
+
+function filt(f,btn){
+  document.querySelectorAll('.fpill').forEach(function(b){b.classList.remove('on')});
+  btn.classList.add('on');buildRL(f);
+}
+
+// Open room detail
+function openRoom(id){
+  var r=ROOMS.find(function(x){return x.id==id});
+  curDetailPhotos=r.photos;
+  curDetailPhotoIdx=0;
+  // Main photo
+  document.getElementById('dPhoto').style.backgroundImage="url('"+r.photos[0]+"')";
+  // Tag
+  document.getElementById('dTag2').innerHTML=r.tag
+    ?'<div class="detail-tag2" style="background:'+r.tc+'">'+r.tag+'</div>':'';
+  // Thumbnails
+  var th=document.getElementById('dThumbs');
+  th.innerHTML=r.photos.map(function(p,i){
+    return'<div class="dthumb'+(i==0?' on':'')+'" style="background-image:url(\''+p+'\')" onclick="setDetailPhoto('+i+')"></div>';
+  }).join('');
+  document.getElementById('dPrice').textContent='от '+r.p.toLocaleString('ru')+' ₽';
+  document.getElementById('dDesc').textContent=r.d;
+  var feats=document.getElementById('dFeats');
+  feats.innerHTML=r.f.map(function(x){
+    return'<div class="d-feat"><div class="d-dot"></div><div class="d-feat-txt">'+x+'</div></div>';
+  }).join('');
+  feats.innerHTML+='<div class="d-feat"><div class="d-dot" style="background:#3A6649"></div><div class="d-feat-txt">Бесплатная парковка</div></div>';
+  go('detail');
+}
+
+function setDetailPhoto(i){
+  curDetailPhotoIdx=i;
+  document.getElementById('dPhoto').style.backgroundImage="url('"+curDetailPhotos[i]+"')";
+  document.querySelectorAll('.dthumb').forEach(function(t,j){t.className='dthumb'+(j==i?' on':'')});
+}
+
+// Booking
+function buildBK(){
+  var el=document.getElementById('bk');
+  if(bForm.ok){
+    el.innerHTML='<div class="succ"><div class="succ-ic">✅</div><div class="succ-t">Запрос отправлен</div><div class="succ-d">Мы свяжемся с вами в ближайшее время для подтверждения бронирования.</div><button class="succ-btn" onclick="resetBK()">НОВОЕ БРОНИРОВАНИЕ</button></div>';
+    return;
+  }
+  var segs=[1,2,3].map(function(s){return'<div class="bp'+(s<=bStep?' on':'')+'"></div>'}).join('');
+  var titles=['ДАТЫ И ГОСТИ','ВАШИ ДАННЫЕ','ПОДТВЕРЖДЕНИЕ'];
+  var body='';
+  if(bStep==1){
+    var opts=ROOMS.map(function(r){return'<option value="'+r.n+'"'+(bForm.rm==r.n?' selected':'')+'>'+r.n+' — от '+r.p.toLocaleString('ru')+' ₽</option>'})abel><input class="finput" type="date" value="'+bForm.ci+'" onchange="bForm.ci=this.value"></div>'
+      +'<div><label class="flbl">Дата выезда</label><input class="finput" type="date" value="'+bForm.co+'" onchange="bForm.co=this.value"></div>'
+      +'<div><label class="flbl">Количество гостей</label><div class="gpills">'+pills+'</div></div>'
+      +'<div><label class="flbl">Тип номера (необязательно)</label><select class="fselect" onchange="bForm.rm=this.value"><option value="">Выберите номер</option>'+opts+'</select></div>'
+      +'</div>';
+  }else if(bStep==2){
+    body='<div class="bk-form">'
+      +'<div><label class="flbl">Имя</label><input class="finput" type="text" placeholder="Иван Иванов" value="'+bForm.nm+'" oninput="bForm.nm=this.value"></div>'
+      +'<div><label class="flbl">Телефон</label><input class="finput" type="tel" placeholder="+7 900 000-00-00" value="'+bForm.ph+'" oninput="bForm.ph=this.value"></div>'
+      +'<div><label class="flbl">Email</label><input class="finput" type="email" placeholder="example@mail.ru" value="'+bForm.em+'" oninput="bForm.em=this.value"></div>'
+      +'<div><label class="flbl">Пожелания</label><textarea class="finput ftarea" rows="3" placeholder="Ранний заезд, доп. кровать..." oninput="bForm.cm=this.value">'+bForm.cm+'</textarea></div>'
+      +'</div>';
+  }else{
+    var rows=[['Заезд',bForm.ci||'—'],['Выезд',bForm.co||'—'],['Гостей',bForm.g],['Номер',bForm.rm||'На ваш выбор'],['Имя',bForm.nm||'—'],['Телефон',bForm.ph||'—'],['Email',bForm.em||'—']];
+    body='<div class="bk-form"><div>'+rows.map(function(x){return'<div class="crow"><div class="clbl">'+x[0]+'</div><div class="cval">'+x[1]+'</div></div>'}).join('')+'</div><div class="wa-note">📲 Нажимая «Отправить», вы перейдёте в WhatsApp. Подтвердим бронирование и вышлем детали оплаты в течение 15 минут.</div></div>';
+  }
+  var bkBtn=bStep>1?'<button class="btn-bk" onclick="bNav(-1)">← НАЗАД</button>':'';
+  var nxLbl=bStep==3?'ОТПРАВИТЬ В WHATSAPP':'ДАЛЕЕ →';
+  el.innerHTML='<div class="bk-hdr"><div class="bk-step">ШАГ '+bStep+' ИЗ 3</div><div class="bk-title">'+titles[bStep-1]+'</div><div class="bk-prog">'+segs+'</div></div>'
+    +body
+    +'<div class="bk-btns">'+bkBtn+'<button class="btn-nx'+(bStep==1?' btn-nx-full':'')+'" onclick="bNav(1)">'+nxLbl+'</button></div>';
+}
+function setG(n){bForm.g=n;buildBK()}
+function bNav(d){
+  if(d==1&&bStep<3){bStep++;buildBK();return}
+  if(d==1&&bStep==3){
+    var msg='Бронирование «Легенда»:\n\nИмя: '+bForm.nm+'\nТел: '+bForm.ph+'\nEmail: '+bForm.em+'\nЗаезд: '+bForm.ci+'\nВыезд: '+bForm.co+'\nГостей: '+bForm.g+'\nНомер: '+(bForm.rm||'на ваш выбор')+'\nПожелания: '+(bForm.cm||'—');
+    window.open('https://wa.me/79993000088?text='+encodeURIComponent(msg));
+    bForm.ok=true;buildBK();return;
+  }
+  if(d==-1&&bStep>1){bStep--;buildBK()}
+}
+function resetBK(){bStep=1;bForm={ci:'',co:'',g:2,rm:'',nm:'',ph:'',em:'',cm:''};buildBK()}
+
+// Navigation
+function go(n){
+  if(n!=cur)hist.push(cur);
+  cur=n;
+  document.querySelectorAll('.scr').forEach(function(s){s.classList.remove('on')});
+  document.getElementById('s-'+n).classList.add('on');
+  var isTab=TABS.indexOf(n)>-1;
+  document.getElementById('backBtn').style.display=isTab?'none':'flex';
+  document.querySelectorAll('.nb').forEach(function(b){b.classList.remove('on')});
+  var at=isTab?n:(hist.slice().reverse().find(function(h){return TABS.indexOf(h)>-1})||'home');
+  var nb=document.getElementById('n-'+at);if(nb)nb.classList.add('on');
+  document.getElementById('content').scrollTop=0;
+  if(n=='booking')buildBK();
+}
+function goBack(){
+  if(hist.length>0){
+    var p=hist.pop();cur=p;
+    document.querySelectorAll('.scr').forEach(function(s){s.classList.remove('on')});
+    document.getElementById('s-'+p).classList.add('on');
+    var isTab=TABS.indexOf(p)>-1;
+    document.getElementById('backBtn').style.display=isTab?'none':'flex';
+    document.querySelectorAll('.nb').forEach(function(b){b.classList.remove('on')});
+    var nb=document.getElementById('n-'+p);if(nb)nb.classList.add('on');
+    document.getElementById('content').scrollTop=0;
+  }
+}
+</script>
+
+
+<!-- ── PWA Install Banner (Android/Desktop) ── -->
+<div id="pwa-banner">
+  <div class="b-ico">
+    <svg width="22" height="22" viewBox="0 0 32 32" fill="none" stroke="#C9A96E" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8">
+      <path d="M3 26 L12 10 L18 18 L22 13 L29 26Z"/>
+      <path d="M10.5 15 L14 11.5 L16 14"/>
+    </svg>
+  </div>
+  <div class="b-txt">
+    <div class="b-title">Установить приложение</div>
+    <div class="b-sub">Работает офлайн · Без браузера</div>
+  </div>
+  <button class="b-btn" id="b-install">Установить</button>
+  <button class="b-x" id="b-close">×</button>
+</div>
+
+<!-- ── iOS Install Hint ── -->
+<div id="ios-hint">
+  <button class="ih-x" id="ih-close">×</button>
+  <div class="ih-title">
+    <svg width="18" height="18" viewBox="0 0 32 32" fill="none" stroke="#C9A96E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 26 L12 10 L18 18 L22 13 L29 26Z"/>
+    </svg>
+    Добавить на экран домой
+  </div>
+  <div class="ih-steps">
+    1. Нажмите <b>«Поделиться»</b> <span class="ih-arrow">⬆</span> в Safari<br>
+    2. Прокрутите вниз → выберите <b>«На экран домой»</b><br>
+    3. Нажмите <b>«Добавить»</b> — приложение установлено!
+  </div>
+</div>
+
+<script>
+(function(){
+  // ── Service Worker ─────────────────────────────────────
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js')
+      .then(function(r){ console.log('[SW] Registered', r.scope); })
+      .catch(function(e){ console.warn('[SW] Failed', e); });
+  }
+
+  var dPrompt = null;
+  var banner  = document.getElementById('pwa-banner');
+  var iosHint = document.getElementById('ios-hint');
+  var shown   = false;
+
+  function showBanner(el) {
+    if (shown || localStorage.getItem('pwa-skip')) return;
+    shown = true;
+    el.style.display = el === banner ? 'flex' : 'block';
+  }
+
+  // ── Android / Desktop install prompt ───────────────────
+  window.addEventListener('beforeinstallprompt', function(e) {
+    e.preventDefault();
+    dPrompt = e;
+    setTimeout(function(){ showBanner(banner); }, 3500);
+  });
+
+  document.getElementById('b-install').addEventListener('click', function() {
+    if (!dPrompt) return;
+    banner.style.display = 'none';
+    dPrompt.prompt();
+    dPrompt.userChoice.then(function(r){
+      if (r.outcome === 'accepted') localStorage.setItem('pwa-skip','1');
+      dPrompt = null;
+    });
+  });
+
+  document.getElementById('b-close').addEventListener('click', function() {
+    banner.style.display = 'none';
+    localStorage.setItem('pwa-skip','1');
+  });
+
+  window.addEventListener('appinstalled', function() {
+    banner.style.display = 'none';
+    localStorage.setItem('pwa-skip','1');
+  });
+
+  // ── iOS Safari hint ────────────────────────────────────
+  var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  var isSafari = /safari/i.test(navigator.userAgent) && !/chrome|crios|fxios/i.test(navigator.userAgent);
+  var isStandalone = window.navigator.standalone === true;
+
+  if (isIOS && isSafari && !isStandalone) {
+    setTimeout(function(){ showBanner(iosHint); }, 4000);
+  }
+
+  document.getElementById('ih-close').addEventListener('click', function() {
+    iosHint.style.display = 'none';
+    localStorage.setItem('pwa-skip','1');
+  });
+
+  // ── URL shortcut: ?screen=booking opens booking ────────
+  if (new URLSearchParams(location.search).get('screen') === 'booking') {
+    setTimeout(function(){
+      var el = document.getElementById('n-booking');
+      if (el) el.click();
+    }, 2800);
+  }
+
+})();
+</script>
+
+</body>
+</html>

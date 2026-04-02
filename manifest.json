@@ -1,0 +1,29 @@
+{
+  "name": "Эко-отель Легенда",
+  "short_name": "Легенда",
+  "description": "Эко-отель в Приэльбрусье. Терскол, ул. Чегет, 5А",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0F0D0A",
+  "theme_color": "#3D2E1E",
+  "lang": "ru",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ],
+  "categories": ["travel", "lifestyle"],
+  "shortcuts": [
+    {
+      "name": "Забронировать",
+      "short_name": "Бронь",
+      "url": "./?screen=booking",
+      "icons": [{ "src": "icon.svg", "sizes": "any" }]
+    },
+    {
+      "name": "Позвонить",
+      "short_name": "Звонок",
+      "url": "tel:+79993000088"
+    }
+  ]
+}
